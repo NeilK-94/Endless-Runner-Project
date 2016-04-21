@@ -4,6 +4,10 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
     public float moveSpeed;
+    public float speedMultiplier;
+    public float speedIncreaseDistance;
+    private float speedDistanceCount;
+
     public float jumpForce;
 
     public float jumpTime;
@@ -24,12 +28,23 @@ public class PlayerController : MonoBehaviour {
         myAnimator = GetComponent<Animator>();  //  same concept as above
 
         jumpTimeCounter = jumpTime;
+
+        speedDistanceCount = speedIncreaseDistance;
     }
 	
 	// Update is called once per frame
 	void Update () {
 
         grounded = Physics2D.IsTouchingLayers(myCollider, whatIsGround);    //  if player collider si touchng another collider(ground)
+
+        if(transform.position.x > speedDistanceCount)   //  speeds player up once certain distance covered (to make it harder)
+        {
+            speedDistanceCount += speedIncreaseDistance;
+
+            speedIncreaseDistance = speedIncreaseDistance * speedMultiplier;   //  ensures doesnt get fast too quick. milestone is getting bigger rather than staying the same.
+            moveSpeed = moveSpeed * speedMultiplier;
+        }
+
         myRigidbody.velocity = new Vector2(moveSpeed, myRigidbody.velocity.y); // movespeed bnut not jumpforce
 
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))   //  if any input (space key) do this 
