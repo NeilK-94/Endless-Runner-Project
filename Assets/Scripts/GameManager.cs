@@ -11,10 +11,14 @@ public class GameManager : MonoBehaviour {
 
     private PlatformDestroyer[] platformList;
 
+    private ScoreManager theScoreManager;
+
 	// Use this for initialization
 	void Start () {
         platformStartPoint = platformGenerator.position;    //  startpoint is the generator position    
         playerStartPoint = thePlayer.transform.position;  //  same as above
+
+        theScoreManager = FindObjectOfType<ScoreManager>(); //  find scoremanager in the scene
 	}
 	
 	// Update is called once per frame
@@ -29,6 +33,7 @@ public class GameManager : MonoBehaviour {
 
     public IEnumerator RestartCoroutine()   //  coroutine runs independantly to rest of script. Allows for time delays (for delay after death)
     {
+        theScoreManager.scoreIncreasing = false;    //  score stop increasing when dead
         thePlayer.gameObject.SetActive(false);  //  player object becomes inactive once dead
         yield return new WaitForSeconds(1.0f);  //  wait for one second
 
@@ -42,5 +47,8 @@ public class GameManager : MonoBehaviour {
         platformGenerator.position = platformStartPoint;
 
         thePlayer.gameObject.SetActive(true);   //  activate him again
+
+        theScoreManager.scoreCount = 0; //  set scre back to 0
+        theScoreManager.scoreIncreasing = true;    //  take score again
     }
 }
