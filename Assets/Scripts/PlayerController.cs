@@ -4,9 +4,15 @@ using System.Collections;
 public class PlayerController : MonoBehaviour {
 
     public float moveSpeed;
+    private float moveSpeedStore;   //  for restarting
+
     public float speedMultiplier;
+
     public float speedIncreaseDistance;
+    private float speedIncreaseDistanceStore;   //  for restarting
+
     private float speedDistanceCount;
+    private float speedDistanceCountStore;   //  for restarting
 
     public float jumpForce;
 
@@ -15,27 +21,38 @@ public class PlayerController : MonoBehaviour {
 
     public bool grounded;
     public LayerMask whatIsGround;   //  selection of layers available
+    public Transform groundCheck;
+    public float groundCheckRadius;
 
     private Rigidbody2D myRigidbody;
-    private Collider2D myCollider;
+
+    //private Collider2D myCollider;
 
     private Animator myAnimator;
+
+    public GameManager theGameManager;
 
 	// Use this for initialization
 	void Start () {
         myRigidbody = GetComponent<Rigidbody2D>(); //  search on player object for rigidbody2d
-        myCollider = GetComponent<Collider2D>();    //  search on player object, and find collider attached
+        //myCollider = GetComponent<Collider2D>();    //  search on player object, and find collider attached
         myAnimator = GetComponent<Animator>();  //  same concept as above
 
         jumpTimeCounter = jumpTime;
 
         speedDistanceCount = speedIncreaseDistance;
+
+        moveSpeedStore = moveSpeed; //  sets speed of counter to originals
+        speedDistanceCountStore = speedDistanceCount;
+        speedIncreaseDistanceStore = speedIncreaseDistance;
     }
 	
 	// Update is called once per frame
 	void Update () {
 
-        grounded = Physics2D.IsTouchingLayers(myCollider, whatIsGround);    //  if player collider si touchng another collider(ground)
+        //grounded = Physics2D.IsTouchingLayers(myCollider, whatIsGround);    //  if player collider si touchng another collider(ground)
+
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);  //  if circle is overlapping then grounded is true
 
         if(transform.position.x > speedDistanceCount)   //  speeds player up once certain distance covered (to make it harder)
         {
@@ -77,5 +94,16 @@ public class PlayerController : MonoBehaviour {
         myAnimator.SetFloat("Speed", myRigidbody.velocity.x);   //  speed for animator
         myAnimator.SetBool("Grounded", grounded);
 
+    }
+
+    void OnCollisionEnter2D (Collision2D other) //  when box collider touches another one, 
+    {                                           //  when player hits 'other object'
+        if (other.gameObject.tag == "KillZone")   //check what 'other' thing is that we hit 
+        {
+            theGameManager.Restart();
+            moveSpeed = moveSpeedStore;
+            speedDistanceCount = speedDistanceCountStore;   //  resets speeds etc once dead
+            speedIncreaseDistance = speedIncreaseDistanceStore;
+        }
     }
 }

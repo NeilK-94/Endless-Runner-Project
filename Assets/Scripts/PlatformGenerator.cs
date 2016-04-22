@@ -45,7 +45,7 @@ public class PlatformGenerator : MonoBehaviour {
 	void Update () {
         if (transform.position.x < generationPoint.position.x)  //  if where we are right nw is more left than generation point
         {
-            distanceBetween = Random.Range(distanceBetweenMin, distanceBetweenMax);
+            distanceBetween = Random.Range(distanceBetweenMin, distanceBetweenMax); //  distance between is a value between minimum distance and maximum
 
             platformSelector = Random.Range(0, theObjectPools.Length); //  length = amount of objects in array... select random platform in array
 

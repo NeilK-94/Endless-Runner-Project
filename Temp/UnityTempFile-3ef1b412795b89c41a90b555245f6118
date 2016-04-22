@@ -77,7 +77,8 @@
 -define:UNITY_EDITOR_64
 -define:UNITY_EDITOR_WIN
 Assets/Scripts/CameraController.cs
-Assets/Scripts/Object.cs
+Assets/Scripts/GameManager.cs
+Assets/Scripts/ObjectPooler.cs
 Assets/Scripts/PlatformDestroyer.cs
 Assets/Scripts/PlatformGenerator.cs
 Assets/Scripts/PlayerController.cs
