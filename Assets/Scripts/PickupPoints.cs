@@ -7,9 +7,12 @@ public class PickupPoints : MonoBehaviour {
 
     private ScoreManager theScoreManager;
 
+    private AudioSource coinSound;
+
 	// Use this for initialization
 	void Start () {
         theScoreManager = FindObjectOfType<ScoreManager>();
+        coinSound = GameObject.Find("Coin (1)").GetComponent<AudioSource>();    //  find coin sound
 	}
 	
 	// Update is called once per frame
@@ -23,6 +26,17 @@ public class PickupPoints : MonoBehaviour {
         {
             theScoreManager.AddScore(scoreToGive);  //  add score to give 
             gameObject.SetActive(false);    //  deactivate coin after hitting it
+
+            if (coinSound.isPlaying)    //  so if we hit more than one coin it sounds much better
+            {
+                coinSound.Stop();
+                coinSound.Play();
+            }
+            else
+            {
+                coinSound.Play();
+            }
+            coinSound.Play();
         }
 
     }

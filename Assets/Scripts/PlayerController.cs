@@ -32,6 +32,9 @@ public class PlayerController : MonoBehaviour {
 
     public GameManager theGameManager;
 
+    public AudioSource jumpSound;
+    public AudioSource deathSound;
+
 	// Use this for initialization
 	void Start () {
         myRigidbody = GetComponent<Rigidbody2D>(); //  search on player object for rigidbody2d
@@ -69,6 +72,7 @@ public class PlayerController : MonoBehaviour {
             if (grounded)
             {
                 myRigidbody.velocity = new Vector2(myRigidbody.velocity.x, jumpForce);  //  opposite to above
+                jumpSound.Play();   //  play sound when jump
             }   //  close inner if
         }   //  close outer if
 
@@ -104,6 +108,7 @@ public class PlayerController : MonoBehaviour {
             moveSpeed = moveSpeedStore;
             speedDistanceCount = speedDistanceCountStore;   //  resets speeds etc once dead
             speedIncreaseDistance = speedIncreaseDistanceStore;
+            deathSound.Play();  //  play death sound
         }
     }
 }
