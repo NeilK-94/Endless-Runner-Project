@@ -29,6 +29,8 @@ public class PlatformGenerator : MonoBehaviour {
     private CoinGenerator theCoinGenerator;
     public float randomCoinThreshold;   //  randomly pick number, to decide whether to put coins on platform
 
+    public float randomSpikeThreshold;
+    public ObjectPooler spikePool;
 
     // Use this for initialization
     void Start () {
@@ -81,6 +83,19 @@ public class PlatformGenerator : MonoBehaviour {
             {
                 theCoinGenerator.SpawnCoins(new Vector3(transform.position.x + 3f, transform.position.y + 2f, transform.position.z)); //  after new platform created but before moved
 
+            }
+
+            if (Random.Range(0f, 100f) < randomSpikeThreshold)
+            {
+                GameObject newSpike = spikePool.GetPooledObject(); //  go to spike pool, get object not being used
+
+                float spikeXPosition = Random.Range(-platformWidths[platformSelector] / 2, platformWidths[platformSelector] / 2); //  choose random x position on platform to spawn spikes. 
+
+                Vector3 spikePosition = new Vector3(spikeXPosition, 0.5f, 0f);  //  move spike up half so its on top of tile
+
+                newSpike.transform.position = transform.position + spikePosition;
+                newSpike.transform.rotation = transform.rotation;
+                newSpike.SetActive(true);
             }
 
             transform.position = new Vector3(transform.position.x + (platformWidths[platformSelector] / 2), transform.position.y, transform.position.z);
